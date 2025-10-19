@@ -1,0 +1,99 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model LostPet {
+  id            String   @id @default(cuid())
+  petName       String
+  petType       String
+  petBreed      String?
+  petSize       String?
+  petColor      String
+  petAge        String?
+  description   String
+  ownerName     String
+  ownerEmail    String
+  ownerPhone    String
+  location      String
+  lostDate      DateTime
+  additionalInfo String?
+  imageUrl      String?
+  status        String   @default("active") // active, found, resolved
+  latitude      Float?
+  longitude     Float?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relaciones
+  sightings     Sighting[]
+  matches       Match[]
+
+  @@map("lost_pets")
+}
+
+model Sighting {
+  id            String   @id @default(cuid())
+  animalType    String
+  animalSize    String?
+  animalColor   String
+  description   String
+  location      String
+  sightingDate  DateTime
+  sightingTime  String?
+  reporterName  String?
+  reporterEmail String?
+  reporterPhone String?
+  sightingType  String   // solo-animal, resembles-lost, with-owner, in-danger
+  additionalInfo String?
+  imageUrl      String?
+  latitude      Float?
+  longitude     Float?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relaciones
+  lostPetId     String?
+  lostPet       LostPet? @relation(fields: [lostPetId], references: [id])
+  matches       Match[]
+
+  @@map("sightings")
+}
+
+model Match {
+  id            String   @id @default(cuid())
+  lostPetId     String
+  sightingId    String
+  confidence    Float    // 0-1 score from AI comparison
+  status        String   @default("pending") // pending, confirmed, rejected
+  reviewedAt    DateTime?
+  reviewedBy    String?
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relaciones
+  lostPet       LostPet @relation(fields: [lostPetId], references: [id])
+  sighting      Sighting @relation(fields: [sightingId], references: [id])
+
+  @@unique([lostPetId, sightingId])
+  @@map("matches")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
