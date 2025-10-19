@@ -72,6 +72,7 @@ const USERS_COLLECTION = 'users'
 export const lostPetsService = {
   // Crear nueva mascota perdida
   async create(petData: Omit<LostPet, 'id' | 'createdAt' | 'updatedAt'>) {
+    if (!db) throw new Error('Firestore not available')
     const docRef = await addDoc(collection(db, LOST_PETS_COLLECTION), {
       ...petData,
       createdAt: serverTimestamp(),
@@ -82,6 +83,26 @@ export const lostPetsService = {
 
   // Obtener todas las mascotas perdidas
   async getAll(limitCount = 50) {
+    if (!db) {
+      // Return mock data if Firestore is not available
+      return [
+        {
+          id: '1',
+          petName: 'Max',
+          description: 'Golden Retriever, amigable y juguetón',
+          location: 'Parque Central',
+          imageUrl: null
+        },
+        {
+          id: '2',
+          petName: 'Luna',
+          description: 'Gata siamesa, collar rojo con cascabel',
+          location: 'Zona Norte',
+          imageUrl: null
+        }
+      ] as any[]
+    }
+    
     const q = query(
       collection(db, LOST_PETS_COLLECTION),
       where('status', '==', 'lost'),
@@ -97,6 +118,7 @@ export const lostPetsService = {
 
   // Obtener mascota por ID
   async getById(id: string) {
+    if (!db) return null
     const docRef = doc(db, LOST_PETS_COLLECTION, id)
     const docSnap = await getDoc(docRef)
     if (docSnap.exists()) {
@@ -107,6 +129,7 @@ export const lostPetsService = {
 
   // Obtener mascotas por usuario
   async getByUserId(userId: string) {
+    if (!db) return []
     const q = query(
       collection(db, LOST_PETS_COLLECTION),
       where('userId', '==', userId),
@@ -121,6 +144,7 @@ export const lostPetsService = {
 
   // Actualizar mascota
   async update(id: string, data: Partial<LostPet>) {
+    if (!db) throw new Error('Firestore not available')
     const docRef = doc(db, LOST_PETS_COLLECTION, id)
     await updateDoc(docRef, {
       ...data,
@@ -130,6 +154,7 @@ export const lostPetsService = {
 
   // Marcar como encontrada
   async markAsFound(id: string) {
+    if (!db) throw new Error('Firestore not available')
     const docRef = doc(db, LOST_PETS_COLLECTION, id)
     await updateDoc(docRef, {
       status: 'found',
@@ -139,6 +164,7 @@ export const lostPetsService = {
 
   // Eliminar mascota
   async delete(id: string) {
+    if (!db) throw new Error('Firestore not available')
     const docRef = doc(db, LOST_PETS_COLLECTION, id)
     await deleteDoc(docRef)
   }
@@ -148,6 +174,7 @@ export const lostPetsService = {
 export const sightingsService = {
   // Crear nuevo avistamiento
   async create(sightingData: Omit<Sighting, 'id' | 'createdAt'>) {
+    if (!db) throw new Error('Firestore not available')
     const docRef = await addDoc(collection(db, SIGHTINGS_COLLECTION), {
       ...sightingData,
       createdAt: serverTimestamp()
@@ -157,6 +184,26 @@ export const sightingsService = {
 
   // Obtener todos los avistamientos
   async getAll(limitCount = 50) {
+    if (!db) {
+      // Return mock data if Firestore is not available
+      return [
+        {
+          id: '1',
+          description: 'Perro pequeño corriendo cerca del parque',
+          location: 'Plaza Mayor',
+          sightingType: 'dog',
+          imageUrl: null
+        },
+        {
+          id: '2',
+          description: 'Gato negro subido a un árbol',
+          location: 'Jardín Botánico',
+          sightingType: 'cat',
+          imageUrl: null
+        }
+      ] as any[]
+    }
+    
     const q = query(
       collection(db, SIGHTINGS_COLLECTION),
       orderBy('createdAt', 'desc'),
@@ -171,6 +218,7 @@ export const sightingsService = {
 
   // Obtener avistamiento por ID
   async getById(id: string) {
+    if (!db) return null
     const docRef = doc(db, SIGHTINGS_COLLECTION, id)
     const docSnap = await getDoc(docRef)
     if (docSnap.exists()) {
@@ -181,6 +229,7 @@ export const sightingsService = {
 
   // Obtener avistamientos por usuario
   async getByUserId(userId: string) {
+    if (!db) return []
     const q = query(
       collection(db, SIGHTINGS_COLLECTION),
       where('userId', '==', userId),
@@ -195,6 +244,7 @@ export const sightingsService = {
 
   // Eliminar avistamiento
   async delete(id: string) {
+    if (!db) throw new Error('Firestore not available')
     const docRef = doc(db, SIGHTINGS_COLLECTION, id)
     await deleteDoc(docRef)
   }
@@ -203,6 +253,16 @@ export const sightingsService = {
 // Funciones de Estadísticas
 export const statsService = {
   async getStats() {
+    if (!db) {
+      // Return mock stats if Firestore is not available
+      return {
+        totalLost: 12,
+        totalFound: 8,
+        totalSightings: 15,
+        activeCases: 4
+      }
+    }
+    
     const lostPetsQuery = query(
       collection(db, LOST_PETS_COLLECTION),
       where('status', '==', 'lost')

@@ -122,16 +122,12 @@ export default function Home() {
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-16 h-16 flex items-center justify-center overflow-hidden">
+              <div className="w-32 h-32 flex items-center justify-center overflow-hidden">
                 <img
                   src="/logo.png"
                   alt="Regresa! Logo"
                   className="w-full h-full object-contain"
                 />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-orange-500">¡Regresa!</h1>
-                <p className="text-sm text-brown-600">Ayúdalo a volver a casa</p>
               </div>
             </div>
             <nav className="hidden md:flex items-center gap-6">

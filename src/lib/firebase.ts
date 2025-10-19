@@ -14,12 +14,34 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 }
 
-// Inicializar Firebase
-const app = initializeApp(firebaseConfig)
+// Verificar si tenemos todas las configuraciones necesarias
+const isFirebaseConfigured = () => {
+  return firebaseConfig.apiKey && 
+         firebaseConfig.authDomain && 
+         firebaseConfig.projectId && 
+         firebaseConfig.appId
+}
 
-// Inicializar servicios
-export const auth = getAuth(app)
-export const db = getFirestore(app)
-export const storage = getStorage(app)
+// Inicializar Firebase solo si está configurado
+let app: any = null
+let auth: any = null
+let db: any = null
+let storage: any = null
 
+try {
+  if (isFirebaseConfigured()) {
+    app = initializeApp(firebaseConfig)
+    auth = getAuth(app)
+    db = getFirestore(app)
+    storage = getStorage(app)
+    console.log('✅ Firebase initialized successfully')
+  } else {
+    console.warn('⚠️ Firebase not configured, using mock mode')
+  }
+} catch (error) {
+  console.error('❌ Firebase initialization failed:', error)
+}
+
+// Exportar servicios (pueden ser null si no está configurado)
+export { auth, db, storage }
 export default app
