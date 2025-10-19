@@ -120,6 +120,26 @@ Esto generará una versión optimizada lista para desplegar en plataformas como 
 
 Si Firebase no está configurado, la aplicación mostrará datos de demostración para que puedas ver cómo funciona la interfaz.
 
+## 🚀 Despliegue
+
+### Despliegue en Vercel
+
+La aplicación está configurada para desplegarse automáticamente en Vercel:
+
+1. Conecta tu repositorio a Vercel
+2. Configura las variables de entorno de Firebase
+3. Haz push a la rama principal para activar el deploy automático
+4. La aplicación estará disponible en una URL de Vercel
+
+### Variables de Entorno Requeridas
+
+- `NEXT_PUBLIC_FIREBASE_API_KEY`
+- `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`
+- `NEXT_PUBLIC_FIREBASE_PROJECT_ID`
+- `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET`
+- `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID`
+- `NEXT_PUBLIC_FIREBASE_APP_ID`
+
 ## 📄 Licencia
 
 Este proyecto es de código abierto y está disponible bajo la Licencia MIT.
@@ -127,3 +147,7 @@ Este proyecto es de código abierto y está disponible bajo la Licencia MIT.
 ## 🤝 Contribuir
 
 Las contribuciones son bienvenidas. Por favor, abre un issue o envía un pull request para cualquier mejora o corrección.
+
+---
+
+**Última actualización**: Despliegue inicial para Vercel 🚀
