@@ -150,6 +150,6 @@ Las contribuciones son bienvenidas. Por favor, abre un issue o envía un pull re
 
 ---
 
-**Última actualización**: Despliegue inicial para Vercel 🚀
+**Última actualización**: Deploy completo con código fuente en Vercel 🚀
 
-**Deploy Status**: Listo para deploy automático en Vercel 🌐
+**Deploy Status**: Todo el código fuente listo para producción 🌐
